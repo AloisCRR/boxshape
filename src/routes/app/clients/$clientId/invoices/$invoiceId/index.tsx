@@ -5,12 +5,12 @@ import { useInvoiceItems } from "@/hooks/useInvoiceItems";
 import { ActionIcon, Button, Group, Paper, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconEdit } from "@tabler/icons-react";
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import type { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
 export const Route = createFileRoute(
-	"/app/clients/$clientId/invoices/$invoiceId",
+	"/app/clients/$clientId/invoices/$invoiceId/",
 )({
 	component: RouteComponent,
 });
@@ -142,6 +142,12 @@ function RouteComponent() {
 				<Button onClick={openCreateInvoiceItemModal}>
 					Create Invoice Item
 				</Button>
+				<Link
+					to="/app/clients/$clientId/invoices/$invoiceId/pdf"
+					params={{ clientId, invoiceId }}
+				>
+					<Button>View PDF</Button>
+				</Link>
 				<Paper p="md" ml="auto" withBorder>
 					<Group justify="flex-end">
 						<Text fw={500}>

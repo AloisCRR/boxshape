@@ -1,6 +1,6 @@
 import { pocketBaseService } from "@/data-access/pocketbase";
 import classes from "@/styles/Navbar.module.css";
-import { AppShell, Burger, Group } from "@mantine/core";
+import { AppShell, Burger, Group, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconTruck, IconUsers } from "@tabler/icons-react";
 import {
@@ -45,6 +45,7 @@ function RouteComponent() {
 		>
 			<AppShell.Header>
 				<Group h="100%" px="md">
+					<Title order={2}>Onebox</Title>
 					<Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
 				</Group>
 			</AppShell.Header>

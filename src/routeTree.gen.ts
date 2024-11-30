@@ -16,7 +16,8 @@ import { Route as AppRouteImport } from './routes/app/route'
 import { Route as AppIndexImport } from './routes/app/index'
 import { Route as AppShipmentsImport } from './routes/app/shipments'
 import { Route as AppClientsClientIdInvoicesIndexImport } from './routes/app/clients/$clientId/invoices/index'
-import { Route as AppClientsClientIdInvoicesInvoiceIdImport } from './routes/app/clients/$clientId/invoices/$invoiceId'
+import { Route as AppClientsClientIdInvoicesInvoiceIdIndexImport } from './routes/app/clients/$clientId/invoices/$invoiceId/index'
+import { Route as AppClientsClientIdInvoicesInvoiceIdPdfImport } from './routes/app/clients/$clientId/invoices/$invoiceId/pdf'
 
 // Create/Update Routes
 
@@ -51,10 +52,17 @@ const AppClientsClientIdInvoicesIndexRoute =
     getParentRoute: () => AppRouteRoute,
   } as any)
 
-const AppClientsClientIdInvoicesInvoiceIdRoute =
-  AppClientsClientIdInvoicesInvoiceIdImport.update({
-    id: '/clients/$clientId/invoices/$invoiceId',
-    path: '/clients/$clientId/invoices/$invoiceId',
+const AppClientsClientIdInvoicesInvoiceIdIndexRoute =
+  AppClientsClientIdInvoicesInvoiceIdIndexImport.update({
+    id: '/clients/$clientId/invoices/$invoiceId/',
+    path: '/clients/$clientId/invoices/$invoiceId/',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+
+const AppClientsClientIdInvoicesInvoiceIdPdfRoute =
+  AppClientsClientIdInvoicesInvoiceIdPdfImport.update({
+    id: '/clients/$clientId/invoices/$invoiceId/pdf',
+    path: '/clients/$clientId/invoices/$invoiceId/pdf',
     getParentRoute: () => AppRouteRoute,
   } as any)
 
@@ -90,18 +98,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexImport
       parentRoute: typeof AppRouteImport
     }
-    '/app/clients/$clientId/invoices/$invoiceId': {
-      id: '/app/clients/$clientId/invoices/$invoiceId'
-      path: '/clients/$clientId/invoices/$invoiceId'
-      fullPath: '/app/clients/$clientId/invoices/$invoiceId'
-      preLoaderRoute: typeof AppClientsClientIdInvoicesInvoiceIdImport
-      parentRoute: typeof AppRouteImport
-    }
     '/app/clients/$clientId/invoices/': {
       id: '/app/clients/$clientId/invoices/'
       path: '/clients/$clientId/invoices'
       fullPath: '/app/clients/$clientId/invoices'
       preLoaderRoute: typeof AppClientsClientIdInvoicesIndexImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/app/clients/$clientId/invoices/$invoiceId/pdf': {
+      id: '/app/clients/$clientId/invoices/$invoiceId/pdf'
+      path: '/clients/$clientId/invoices/$invoiceId/pdf'
+      fullPath: '/app/clients/$clientId/invoices/$invoiceId/pdf'
+      preLoaderRoute: typeof AppClientsClientIdInvoicesInvoiceIdPdfImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/app/clients/$clientId/invoices/$invoiceId/': {
+      id: '/app/clients/$clientId/invoices/$invoiceId/'
+      path: '/clients/$clientId/invoices/$invoiceId'
+      fullPath: '/app/clients/$clientId/invoices/$invoiceId'
+      preLoaderRoute: typeof AppClientsClientIdInvoicesInvoiceIdIndexImport
       parentRoute: typeof AppRouteImport
     }
   }
@@ -112,16 +127,19 @@ declare module '@tanstack/react-router' {
 interface AppRouteRouteChildren {
   AppShipmentsRoute: typeof AppShipmentsRoute
   AppIndexRoute: typeof AppIndexRoute
-  AppClientsClientIdInvoicesInvoiceIdRoute: typeof AppClientsClientIdInvoicesInvoiceIdRoute
   AppClientsClientIdInvoicesIndexRoute: typeof AppClientsClientIdInvoicesIndexRoute
+  AppClientsClientIdInvoicesInvoiceIdPdfRoute: typeof AppClientsClientIdInvoicesInvoiceIdPdfRoute
+  AppClientsClientIdInvoicesInvoiceIdIndexRoute: typeof AppClientsClientIdInvoicesInvoiceIdIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppShipmentsRoute: AppShipmentsRoute,
   AppIndexRoute: AppIndexRoute,
-  AppClientsClientIdInvoicesInvoiceIdRoute:
-    AppClientsClientIdInvoicesInvoiceIdRoute,
   AppClientsClientIdInvoicesIndexRoute: AppClientsClientIdInvoicesIndexRoute,
+  AppClientsClientIdInvoicesInvoiceIdPdfRoute:
+    AppClientsClientIdInvoicesInvoiceIdPdfRoute,
+  AppClientsClientIdInvoicesInvoiceIdIndexRoute:
+    AppClientsClientIdInvoicesInvoiceIdIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
@@ -133,16 +151,18 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/app/shipments': typeof AppShipmentsRoute
   '/app/': typeof AppIndexRoute
-  '/app/clients/$clientId/invoices/$invoiceId': typeof AppClientsClientIdInvoicesInvoiceIdRoute
   '/app/clients/$clientId/invoices': typeof AppClientsClientIdInvoicesIndexRoute
+  '/app/clients/$clientId/invoices/$invoiceId/pdf': typeof AppClientsClientIdInvoicesInvoiceIdPdfRoute
+  '/app/clients/$clientId/invoices/$invoiceId': typeof AppClientsClientIdInvoicesInvoiceIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/app/shipments': typeof AppShipmentsRoute
   '/app': typeof AppIndexRoute
-  '/app/clients/$clientId/invoices/$invoiceId': typeof AppClientsClientIdInvoicesInvoiceIdRoute
   '/app/clients/$clientId/invoices': typeof AppClientsClientIdInvoicesIndexRoute
+  '/app/clients/$clientId/invoices/$invoiceId/pdf': typeof AppClientsClientIdInvoicesInvoiceIdPdfRoute
+  '/app/clients/$clientId/invoices/$invoiceId': typeof AppClientsClientIdInvoicesInvoiceIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -151,8 +171,9 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/app/shipments': typeof AppShipmentsRoute
   '/app/': typeof AppIndexRoute
-  '/app/clients/$clientId/invoices/$invoiceId': typeof AppClientsClientIdInvoicesInvoiceIdRoute
   '/app/clients/$clientId/invoices/': typeof AppClientsClientIdInvoicesIndexRoute
+  '/app/clients/$clientId/invoices/$invoiceId/pdf': typeof AppClientsClientIdInvoicesInvoiceIdPdfRoute
+  '/app/clients/$clientId/invoices/$invoiceId/': typeof AppClientsClientIdInvoicesInvoiceIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -162,23 +183,26 @@ export interface FileRouteTypes {
     | '/login'
     | '/app/shipments'
     | '/app/'
-    | '/app/clients/$clientId/invoices/$invoiceId'
     | '/app/clients/$clientId/invoices'
+    | '/app/clients/$clientId/invoices/$invoiceId/pdf'
+    | '/app/clients/$clientId/invoices/$invoiceId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
     | '/app/shipments'
     | '/app'
-    | '/app/clients/$clientId/invoices/$invoiceId'
     | '/app/clients/$clientId/invoices'
+    | '/app/clients/$clientId/invoices/$invoiceId/pdf'
+    | '/app/clients/$clientId/invoices/$invoiceId'
   id:
     | '__root__'
     | '/app'
     | '/login'
     | '/app/shipments'
     | '/app/'
-    | '/app/clients/$clientId/invoices/$invoiceId'
     | '/app/clients/$clientId/invoices/'
+    | '/app/clients/$clientId/invoices/$invoiceId/pdf'
+    | '/app/clients/$clientId/invoices/$invoiceId/'
   fileRoutesById: FileRoutesById
 }
 
@@ -211,8 +235,9 @@ export const routeTree = rootRoute
       "children": [
         "/app/shipments",
         "/app/",
-        "/app/clients/$clientId/invoices/$invoiceId",
-        "/app/clients/$clientId/invoices/"
+        "/app/clients/$clientId/invoices/",
+        "/app/clients/$clientId/invoices/$invoiceId/pdf",
+        "/app/clients/$clientId/invoices/$invoiceId/"
       ]
     },
     "/login": {
@@ -226,12 +251,16 @@ export const routeTree = rootRoute
       "filePath": "app/index.tsx",
       "parent": "/app"
     },
-    "/app/clients/$clientId/invoices/$invoiceId": {
-      "filePath": "app/clients/$clientId/invoices/$invoiceId.tsx",
-      "parent": "/app"
-    },
     "/app/clients/$clientId/invoices/": {
       "filePath": "app/clients/$clientId/invoices/index.tsx",
+      "parent": "/app"
+    },
+    "/app/clients/$clientId/invoices/$invoiceId/pdf": {
+      "filePath": "app/clients/$clientId/invoices/$invoiceId/pdf.tsx",
+      "parent": "/app"
+    },
+    "/app/clients/$clientId/invoices/$invoiceId/": {
+      "filePath": "app/clients/$clientId/invoices/$invoiceId/index.tsx",
       "parent": "/app"
     }
   }

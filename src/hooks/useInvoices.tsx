@@ -3,10 +3,16 @@ import type { Invoice } from "@/domain/entities/invoice";
 import { notifications } from "@mantine/notifications";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useInvoices = (clientId?: string) => {
+export const useInvoices = (clientId?: string, invoiceId?: string) => {
 	const { data: invoices, isFetching: loadingInvoices } = useQuery<Invoice[]>({
 		queryKey: ["invoices"],
 		queryFn: pocketBaseService.getInvoices,
+	});
+
+	const { data: invoice, isFetching: loadingInvoice } = useQuery<Invoice>({
+		queryKey: ["invoice", invoiceId],
+		queryFn: () => pocketBaseService.getInvoice(invoiceId ?? ""),
+		enabled: !!invoiceId,
 	});
 
 	const { data: invoicesOfClient, isFetching: loadingInvoicesOfClient } =
@@ -75,5 +81,7 @@ export const useInvoices = (clientId?: string) => {
 		loadingInvoicesOfClient,
 		updateInvoice,
 		updatingInvoice,
+		invoice,
+		loadingInvoice,
 	};
 };

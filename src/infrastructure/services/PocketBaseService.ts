@@ -11,6 +11,57 @@ export class PocketBaseService implements IDataService {
 		this.pb = new PocketBase(url);
 	}
 
+	getInvoice = async (invoiceId: string): Promise<Invoice> => {
+		const invoice = await this.pb
+			.collection<{
+				id: string;
+				client: string;
+				number: string;
+				status: "paid" | "unpaid";
+				created: string;
+				updated: string;
+			}>("invoice")
+			.getOne(invoiceId);
+
+		return invoice;
+	};
+
+	getClient = async (clientId: string): Promise<Client> => {
+		const client = await this.pb
+			.collection<{
+				id: string;
+				name: string;
+				email: string;
+				phone: string;
+				created: string;
+				updated: string;
+			}>("clients")
+			.getOne(clientId);
+
+		return client;
+	};
+
+	getClientAndInvoices = async (
+		clientId: string,
+		invoiceId: string,
+	): Promise<{ client: Client; invoice: Invoice }> => {
+		const client = await this.pb
+			.collection<{
+				id: string;
+				name: string;
+				email: string;
+				phone: string;
+				created: string;
+				updated: string;
+			}>("clients")
+			.getOne(clientId);
+		const invoice = await this.pb
+			.collection<Invoice>("invoice")
+			.getOne(invoiceId);
+
+		return { client, invoice };
+	};
+
 	updateInvoiceItem = async (
 		invoiceItemId: string,
 		invoiceItem: Partial<InvoiceItem>,
@@ -39,7 +90,14 @@ export class PocketBaseService implements IDataService {
 		invoice: Partial<Invoice>,
 	): Promise<Invoice> => {
 		const updatedInvoice = await this.pb
-			.collection<Invoice>("invoice")
+			.collection<{
+				id: string;
+				client: string;
+				number: string;
+				status: "paid" | "unpaid";
+				created: string;
+				updated: string;
+			}>("invoice")
 			.update(invoiceId, invoice);
 
 		return updatedInvoice;
@@ -128,14 +186,30 @@ export class PocketBaseService implements IDataService {
 	};
 
 	getInvoices = async () => {
-		const invoices = await this.pb.collection<Invoice>("invoice").getFullList();
+		const invoices = await this.pb
+			.collection<{
+				id: string;
+				client: string;
+				number: string;
+				status: "paid" | "unpaid";
+				created: string;
+				updated: string;
+			}>("invoice")
+			.getFullList();
 
 		return invoices;
 	};
 
 	createInvoice = async (invoice: Invoice) => {
 		const createdInvoice = await this.pb
-			.collection<Invoice>("invoice")
+			.collection<{
+				id: string;
+				client: string;
+				number: string;
+				status: "paid" | "unpaid";
+				created: string;
+				updated: string;
+			}>("invoice")
 			.create(invoice);
 
 		return createdInvoice;
@@ -193,20 +267,32 @@ export class PocketBaseService implements IDataService {
 
 	createClient = async (client: Client) => {
 		const createdClient = await this.pb
-			.collection<Client>("clients")
+			.collection<{
+				id: string;
+				name: string;
+				email: string;
+				phone: string;
+			}>("clients")
 			.create(client);
 
 		return createdClient;
 	};
 
 	getClients = async () => {
-		const clients = await this.pb.collection<Client>("clients").getFullList();
+		const clients = await this.pb
+			.collection<{
+				id: string;
+				name: string;
+				email: string;
+				phone: string;
+			}>("clients")
+			.getFullList();
 
 		return clients;
 	};
 
 	login = async (email: string, password: string) => {
-		await this.pb.admins.authWithPassword(email, password);
+		await this.pb.collection("_superusers").authWithPassword(email, password);
 	};
 
 	isAuthenticated = () => {

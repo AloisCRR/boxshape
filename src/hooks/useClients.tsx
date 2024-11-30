@@ -3,10 +3,16 @@ import type { Client } from "@/domain/entities/client";
 import { notifications } from "@mantine/notifications";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useClients = () => {
+export const useClients = (clientId?: string) => {
 	const { data: clients, isFetching: loadingClients } = useQuery<Client[]>({
 		queryKey: ["clients"],
 		queryFn: pocketBaseService.getClients,
+	});
+
+	const { data: client, isFetching: loadingClient } = useQuery<Client>({
+		queryKey: ["client", clientId],
+		queryFn: () => pocketBaseService.getClient(clientId ?? ""),
+		enabled: !!clientId,
 	});
 
 	const queryClient = useQueryClient();
@@ -30,5 +36,12 @@ export const useClients = () => {
 		},
 	});
 
-	return { clients, loadingClients, createClient, creatingClient };
+	return {
+		clients,
+		loadingClients,
+		client,
+		loadingClient,
+		createClient,
+		creatingClient,
+	};
 };
