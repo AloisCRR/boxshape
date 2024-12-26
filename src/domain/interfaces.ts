@@ -31,6 +31,9 @@ export interface IDataService {
 	) => Promise<(InvoiceItem & { shipment: Shipment })[]>;
 	createInvoiceItem: (invoiceItem: InvoiceItem) => Promise<InvoiceItem>;
 	getShipments: () => Promise<Shipment[]>;
+	getShipmentsWithClient: (
+		shipmentId: string,
+	) => Promise<(Shipment & { client: Client })[]>;
 	getShipmentsOfClient: (clientId: string) => Promise<Shipment[]>;
 	createShipment: (shipment: Shipment) => Promise<Shipment>;
 	login: (email: string, password: string) => Promise<void>;

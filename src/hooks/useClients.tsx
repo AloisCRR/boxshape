@@ -23,12 +23,14 @@ export const useClients = (clientId?: string) => {
 			notifications.show({
 				title: "Client created",
 				message: "Client created successfully",
+				color: "green",
 			});
 		},
 		onError: (error) => {
 			notifications.show({
 				title: "Client creation failed",
 				message: error.message,
+				color: "red",
 			});
 		},
 		onSettled: async () => {

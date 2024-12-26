@@ -149,20 +149,18 @@ function InvoicePDF({
 
 function RouteComponent() {
 	const { clientId, invoiceId } = Route.useParams();
-	const { clients, loadingClients } = useClients();
+	const { client, loadingClient } = useClients(clientId);
 	const { invoice, loadingInvoice } = useInvoices(clientId, invoiceId);
 	const { itemsWithShipment, loadingItemsWithShipment } =
 		useInvoiceItems(invoiceId);
 
-	if (loadingClients || loadingInvoice || loadingItemsWithShipment) {
+	if (loadingClient || loadingInvoice || loadingItemsWithShipment) {
 		return <div>Loading...</div>;
 	}
 
-	if (!clients || !invoice || !itemsWithShipment) {
+	if (!client || !invoice || !itemsWithShipment) {
 		return <div>No data available</div>;
 	}
-
-	const client = clients.find((c) => c.id === clientId);
 
 	if (!client || !invoice) {
 		return <div>Invoice or client not found</div>;

@@ -149,7 +149,6 @@ export function CreateInvoiceItemForm({
 							combobox.closeDropdown();
 						}}
 						store={combobox}
-						withinPortal={false}
 					>
 						<Combobox.Target>
 							<TextInput

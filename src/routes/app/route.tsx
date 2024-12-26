@@ -9,6 +9,7 @@ import {
 	createFileRoute,
 	redirect,
 } from "@tanstack/react-router";
+
 export const Route = createFileRoute("/app")({
 	beforeLoad: () => {
 		const isAuthenticated = pocketBaseService.isAuthenticated();
@@ -26,7 +27,7 @@ export const Route = createFileRoute("/app")({
 });
 
 const data = [
-	{ link: "/app", label: "Clients", icon: IconUsers },
+	{ link: "/app/clients", label: "Clients", icon: IconUsers },
 	{ link: "/app/shipments", label: "Shipments", icon: IconTruck },
 ];
 
@@ -53,6 +54,7 @@ function RouteComponent() {
 				{data.map(({ link, label, icon: Icon }) => (
 					<Link
 						to={link}
+						activeOptions={{ exact: true }}
 						activeProps={{ "data-active": true }}
 						className={classes.link}
 						key={label}

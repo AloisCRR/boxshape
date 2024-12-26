@@ -11,6 +11,46 @@ export class PocketBaseService implements IDataService {
 		this.pb = new PocketBase(url);
 	}
 
+	getShipmentsWithClient = async (): Promise<
+		(Shipment & { client: Client })[]
+	> => {
+		const items = await this.pb.collection("shipments").getList<{
+			id: string;
+			client: string;
+			shipment_type: "air" | "sea";
+			price: number;
+			unit: string;
+			po_box_number: string;
+			expand: {
+				client: {
+					id: string;
+					name: string;
+					email: string;
+					phone: string;
+					created: string;
+					updated: string;
+				};
+			};
+		}>(1, 30, {
+			expand: "client",
+		});
+
+		return items.items.map((item) => ({
+			id: item.id,
+			clientId: item.expand.client.id,
+			shipmentType: item.shipment_type,
+			price: item.price,
+			unit: item.unit,
+			poBoxNumber: item.po_box_number,
+			client: {
+				id: item.expand.client.id,
+				name: item.expand.client.name,
+				email: item.expand.client.email,
+				phone: item.expand.client.phone,
+			},
+		}));
+	};
+
 	getInvoice = async (invoiceId: string): Promise<Invoice> => {
 		const invoice = await this.pb
 			.collection<{
