@@ -1,19 +1,23 @@
-import { pocketBaseService } from "@/data-access/pocketbase";
-import { useLogin } from "@/hooks/useLogin";
 import classes from "@/styles/AuthenticationTitle.module.css";
-import { zodResolver } from "@hookform/resolvers/zod";
+import {
+	SignInButton,
+	SignOutButton,
+	SignedIn,
+	SignedOut,
+} from "@clerk/clerk-react";
 import {
 	Button,
 	Container,
+	Divider,
 	Paper,
-	PasswordInput,
-	TextInput,
+	Stack,
+	Text,
 	Title,
+	rem,
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { IconBrandGoogle } from "@tabler/icons-react";
+import { createFileRoute } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const searchSchema = z.object({
@@ -22,89 +26,59 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/login")({
 	component: RouteComponent,
-	loader: () => {
-		if (pocketBaseService.isAuthenticated()) {
-			throw redirect({ to: "/app", replace: true });
-		}
-	},
 	validateSearch: zodValidator(searchSchema),
 });
 
-const loginSchema = z.object({
-	email: z.string().email(),
-	password: z.string().min(10, "Password must be at least 10 characters"),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
-
 function RouteComponent() {
-	const form = useForm<LoginFormValues>({
-		resolver: zodResolver(loginSchema),
-		defaultValues: {
-			email: "",
-			password: "",
-		},
-	});
-
-	const { mutate } = useLogin();
-
-	const navigate = useNavigate();
-
-	const { redirect } = Route.useSearch();
-
-	const onSubmit = (data: LoginFormValues) => {
-		mutate(data, {
-			onSuccess: () => {
-				notifications.show({
-					title: "Login successful",
-					message: "You are now logged in",
-				});
-
-				if (redirect) {
-					navigate({ to: redirect });
-				} else {
-					navigate({ to: "/app" });
-				}
-			},
-			onError: (error) => {
-				console.log(error);
-
-				notifications.show({
-					title: "Login failed",
-					message: error.message,
-					color: "red",
-				});
-			},
-		});
-	};
-
 	return (
 		<Container size={420} my={40}>
 			<Title ta="center" className={classes.title}>
-				Onebox
+				Welcome to Boxshape
 			</Title>
+			<Text c="dimmed" size="sm" ta="center" mt={5}>
+				Sign in to access your dashboard
+			</Text>
 
 			<Paper withBorder shadow="md" p={30} mt={30} radius="md">
-				<form onSubmit={form.handleSubmit(onSubmit)}>
-					<TextInput
-						label="Email"
-						placeholder="you@email.com"
-						required
-						{...form.register("email")}
-						error={form.formState.errors.email?.message}
-					/>
-					<PasswordInput
-						label="Password"
-						placeholder="Your password"
-						required
-						mt="md"
-						{...form.register("password")}
-						error={form.formState.errors.password?.message}
-					/>
-					<Button fullWidth mt="xl" type="submit">
-						Sign in
-					</Button>
-				</form>
+				<SignedOut>
+					<Stack>
+						<SignInButton mode="modal">
+							<Button
+								leftSection={<IconBrandGoogle style={{ width: rem(18) }} />}
+								variant="default"
+								size="md"
+								fullWidth
+							>
+								Continue with Google
+							</Button>
+						</SignInButton>
+
+						<Divider
+							label="or continue with email"
+							labelPosition="center"
+							my="lg"
+						/>
+
+						<SignInButton mode="modal">
+							<Button size="md" fullWidth>
+								Sign in with Email
+							</Button>
+						</SignInButton>
+					</Stack>
+				</SignedOut>
+
+				<SignedIn>
+					<Stack>
+						<Text size="sm" ta="center" mb="md">
+							You are currently signed in
+						</Text>
+						<SignOutButton>
+							<Button variant="light" color="red" fullWidth>
+								Sign Out
+							</Button>
+						</SignOutButton>
+					</Stack>
+				</SignedIn>
 			</Paper>
 		</Container>
 	);

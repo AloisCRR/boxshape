@@ -46,7 +46,7 @@ function RouteComponent() {
 		>
 			<AppShell.Header>
 				<Group h="100%" px="md">
-					<Title order={2}>Onebox</Title>
+					<Title order={2}>Boxshape</Title>
 					<Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
 				</Group>
 			</AppShell.Header>

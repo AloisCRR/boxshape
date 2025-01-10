@@ -89,7 +89,7 @@ function InvoicePDF({
 		<Document>
 			<Page size="A4" style={styles.page}>
 				<View style={styles.header}>
-					<Text>Onebox</Text>
+					<Text>Boxshape</Text>
 					<Text style={styles.title}>Invoice #{invoice.number}</Text>
 					<Text>
 						Date: {new Date(invoice.created ?? "").toLocaleDateString()}
