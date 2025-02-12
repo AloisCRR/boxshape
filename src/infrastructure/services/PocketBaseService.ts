@@ -121,7 +121,7 @@ export class PocketBaseService implements IDataService {
 			invoiceNumber: updatedItem.invoice,
 			amount: updatedItem.amount,
 			trackingCode: updatedItem.tracking_code,
-			shipmentType: updatedItem.shipment,
+			shipmentId: updatedItem.shipment,
 		};
 	};
 
@@ -368,7 +368,7 @@ export class PocketBaseService implements IDataService {
 				tracking_code: invoiceItem.trackingCode,
 				description: invoiceItem.description,
 				invoice: invoiceItem.invoiceNumber,
-				shipment: invoiceItem.shipmentType,
+				shipment: invoiceItem.shipmentId,
 			});
 
 		return {
@@ -376,7 +376,7 @@ export class PocketBaseService implements IDataService {
 			invoiceNumber: createdItem.invoice,
 			amount: createdItem.amount,
 			trackingCode: createdItem.tracking_code,
-			shipmentType: createdItem.shipment,
+			shipmentId: createdItem.shipment,
 		};
 	};
 

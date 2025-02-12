@@ -1,0 +1,147 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+"""Client of the business"""
+type ClientModel {
+  address: String
+  created: DateTime!
+  email: String!
+  id: ID!
+  name: String!
+  phone: String
+  updated: DateTime!
+}
+
+input CreateClientInput {
+  address: String
+  email: String!
+  name: String!
+  phone: String
+}
+
+input CreateInvoiceInput {
+  clientId: ID!
+  statusId: ID!
+}
+
+input CreateInvoiceItemInput {
+  amount: Float!
+  description: String
+  invoiceNumber: String!
+  shipmentId: ID!
+  trackingCode: String!
+}
+
+input CreateShipmentInput {
+  clientId: ID!
+  poBoxNumber: String
+  price: Float!
+  shipmentTypeId: ID!
+  unit: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""Invoice Item"""
+type InvoiceItemModel {
+  amount: Float!
+  description: String
+  id: ID!
+  invoice: InvoiceModel
+  invoiceNumber: String!
+  shipment: ShipmentModel
+  shipmentId: ID!
+  trackingCode: String!
+}
+
+"""Invoice"""
+type InvoiceModel {
+  client: ClientModel
+  clientId: ID!
+  created: DateTime!
+  id: ID!
+  number: String!
+  status: InvoiceStatusModel
+  statusId: ID!
+  updated: DateTime!
+}
+
+"""Invoice Status"""
+type InvoiceStatusModel {
+  id: ID!
+  name: String!
+}
+
+type Mutation {
+  createClient(input: CreateClientInput!): ClientModel!
+  createInvoice(input: CreateInvoiceInput!): InvoiceModel!
+  createInvoiceItem(input: CreateInvoiceItemInput!): InvoiceItemModel!
+  createShipment(input: CreateShipmentInput!): ShipmentModel!
+  updateInvoice(id: String!, input: UpdateInvoiceInput!): InvoiceModel!
+  updateInvoiceItem(id: ID!, input: UpdateInvoiceItemInput!): InvoiceItemModel!
+  updateShipment(id: ID!, input: UpdateShipmentInput!): ShipmentModel!
+}
+
+type Query {
+  client(id: String!): ClientModel!
+  clients: [ClientModel!]!
+  invoice(id: String!): InvoiceModel!
+  invoiceItems(invoiceNumber: String!): [InvoiceItemModel!]!
+  invoiceItemsWithShipment(invoiceNumber: String!): [InvoiceItemModel!]!
+  invoices: [InvoiceModel!]!
+  invoicesByClient(clientId: String!): [InvoiceModel!]!
+  shipment(id: ID!): ShipmentModel!
+  shipments: [ShipmentModel!]!
+  shipmentsOfClient(clientId: ID!): [ShipmentModel!]!
+  shipmentsWithClient: [ShipmentModel!]!
+}
+
+"""Shipment"""
+type ShipmentModel {
+  client: ClientModel
+  clientId: ID!
+  created: DateTime!
+  id: ID!
+  poBoxNumber: String
+  price: Float!
+  shipmentType: ShipmentTypeModel
+  shipmentTypeId: ID!
+  unit: String!
+  updated: DateTime!
+}
+
+"""Shipment Type"""
+type ShipmentTypeModel {
+  id: ID!
+  name: String!
+}
+
+input UpdateInvoiceInput {
+  clientId: ID
+  created: DateTime
+  id: ID
+  number: String
+  statusId: ID
+  updated: DateTime
+}
+
+input UpdateInvoiceItemInput {
+  amount: Float
+  description: String
+  invoiceNumber: String
+  shipmentId: ID
+  trackingCode: String
+}
+
+input UpdateShipmentInput {
+  clientId: ID
+  poBoxNumber: String
+  price: Float
+  shipmentTypeId: ID
+  unit: String
+}

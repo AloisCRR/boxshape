@@ -68,7 +68,7 @@ export function CreateInvoiceItemForm({
 				trackingCode: data.tracking_code,
 				description: data.description,
 				invoiceNumber: invoiceId,
-				shipmentType: data.shipment,
+				shipmentId: data.shipment,
 			},
 			{
 				onSuccess: () => {

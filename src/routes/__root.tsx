@@ -26,6 +26,7 @@ const theme = createTheme({
 	colors: {
 		boxshapeColor: boxshapeColor,
 	},
+	fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
 });
 
 const queryClient = new QueryClient();
@@ -41,7 +42,7 @@ export const Route = createRootRoute({
 		return (
 			<ClerkProvider publishableKey={PUBLISHABLE_KEY}>
 				<QueryClientProvider client={queryClient}>
-					<MantineProvider theme={theme} defaultColorScheme="dark">
+					<MantineProvider theme={theme}>
 						<Notifications />
 						<ModalsProvider>
 							<Outlet />

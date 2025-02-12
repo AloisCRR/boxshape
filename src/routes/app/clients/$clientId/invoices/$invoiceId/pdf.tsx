@@ -130,7 +130,7 @@ function InvoicePDF({
 						<View key={item.id} style={styles.item}>
 							<Text style={styles.col}>{item.trackingCode}</Text>
 							<Text style={styles.col}>
-								{item.shipment.poBoxNumber} / {item.shipmentType.toUpperCase()}
+								{item.shipment.poBoxNumber} / {item.shipmentId.toUpperCase()}
 							</Text>
 							<Text style={styles.col}>
 								$ {item.shipment.price} {item.shipment.unit}
